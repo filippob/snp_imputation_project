@@ -7,7 +7,8 @@ import re
 prjfolder = '/home/biscarinif/imputation'
 fname = '/home/freeclimb/data/maize/maize.map'
 outdir = os.path.join(prjfolder, 'Analysis/maize/filtered_data')
-nreplicates = 3 ## n. of bootstrapping replicates of the data
+nreplicates = 10 ## n. of bootstrapping replicates of the data
+nld = 8144 ## for maize nld = 8144, as in peach (althoug HD is 47k in maize and 18k in peach)
 
 print('input file is', os.path.join(prjfolder, fname))
 print('outdir is', outdir)
@@ -20,6 +21,7 @@ for line in mapin:
 	if line[1] not in snps:
 		snps.append(line[1])
 
+nsnps = len(snps)
 
 import numpy as np
 
@@ -27,7 +29,7 @@ counter=0
 for i in range(3):
     counter+=1
     print('iteration n. {}'.format(counter))
-    randNumbers=np.random.randint(1,23550,7065)
+    randNumbers=np.random.randint(1, nsnps, nld)
     sortedrandNumbers=sorted(randNumbers)
     randsnps=[]
     for i in sortedrandNumbers:
@@ -35,7 +37,6 @@ for i in range(3):
     mapin.seek(0)
     bsnm = os.path.basename(mapin.name)
     temp = re.sub('\.map$', '', bsnm) + "_bootstrap_" + str(counter) + ".txt"
-    print(mapin.name)
     filename = os.path.join(outdir, temp)
     print('currently creating file: ', filename)
     mapOut = open(filename, 'w')
