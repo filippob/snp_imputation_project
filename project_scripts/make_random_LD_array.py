@@ -1,11 +1,16 @@
 #in python
 
 import os
+import re
 
 ## define path to input map file ##
 prjfolder = '/home/biscarinif/imputation'
 fname = '/home/freeclimb/data/maize/maize.map'
 outdir = os.path.join(prjfolder, 'Analysis/maize/filtered_data')
+nreplicates = 3 ## n. of bootstrapping replicates of the data
+
+print('input file is', os.path.join(prjfolder, fname))
+print('outdir is', outdir)
 
 mapin = open(os.path.join(prjfolder, fname))
 
@@ -19,7 +24,7 @@ for line in mapin:
 import numpy as np
 
 counter=0
-for i in range(100):
+for i in range(3):
     counter+=1
     print('iteration n. {}'.format(counter))
     randNumbers=np.random.randint(1,23550,7065)
@@ -28,7 +33,12 @@ for i in range(100):
     for i in sortedrandNumbers:
         randsnps.append(snps[i])
     mapin.seek(0)
-    mapOut = open(os.path.join(outdir, mapin.name.strip(".map")+"_bootstrap_"+str(counter)+".txt"),'w')
+    bsnm = os.path.basename(mapin.name)
+    temp = re.sub('\.map$', '', bsnm) + "_bootstrap_" + str(counter) + ".txt"
+    print(mapin.name)
+    filename = os.path.join(outdir, temp)
+    print('currently creating file: ', filename)
+    mapOut = open(filename, 'w')
     for line in mapin:
         line=line.split()
         for locus in randsnps:
