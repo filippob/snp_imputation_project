@@ -5,10 +5,10 @@ import re
 
 ## define path to input map file ##
 prjfolder = '/home/biscarinif/imputation'
-fname = '/home/freeclimb/data/maize/maize.map'
-outdir = os.path.join(prjfolder, 'Analysis/maize/filtered_data')
+fname = '/home/freeclimb/data/simdata/lm_mrk.map'
+outdir = os.path.join(prjfolder, 'Analysis/simdata/filtered_data')
 nreplicates = 10 ## n. of bootstrapping replicates of the data
-nld = 8144 ## for maize nld = 8144, as in peach (althoug HD is 47k in maize and 18k in peach)
+nld = 5000 ## for maize nld = 8144, as in peach (althoug HD is 47k in maize and 18k in peach); nld = 7065 in goats (why? As in sheep/cattle?); nld = 5000 for simdata (half of the original simulated SNP array)
 
 print('input file is', os.path.join(prjfolder, fname))
 print('outdir is', outdir)
@@ -26,7 +26,7 @@ nsnps = len(snps)
 import numpy as np
 
 counter=0
-for i in range(3):
+for i in range(nreplicates):
     counter+=1
     print('iteration n. {}'.format(counter))
     randNumbers=np.random.randint(1, nsnps, nld)
