@@ -8,6 +8,7 @@
 #SBATCH --mem=16gb                     # Job memory request
 #SBATCH --output=/home/biscarinif/imputation/log/densityimp_%j.log   # Standard output and error log
 
+## !! REMEMBER: CHANGE CONFIG FILE TO USE THE BEAGLE SINGULARITY CONTAINER !!
 repofolder="$HOME/imputation"
 start=`date +%s`
 bash $repofolder/run_multi_imputation.sh

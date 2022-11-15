@@ -4,7 +4,7 @@
 
 ## PARAMETERS
 datafolder="Analysis/peach/filtered_data"
-n=2 ## n. of replicates to run
+n=5 ## n. of replicates to run
 
 echo " - data folder is $datafolder"
 echo " - the desired number of replicates per dataset is $n"
