@@ -12,10 +12,10 @@ if (length(args) == 1){
   #as follows
   config = NULL
   config = rbind(config, data.frame(
-    base_folder = '/home/filippo/Documents/chiara/imputation',
-    stat_folder = 'Analysis/peach/stats',
-    dataset = 'combined_18k_filtered', ## name of dataset
-    outdir = 'Analysis/peach/stats',
+    base_folder = '/home/biscarinif/imputation',
+    stat_folder = 'Analysis/goat/stats',
+    dataset = 'goat_filtered', ## name of dataset
+    outdir = 'Analysis/goat/stats',
     force_overwrite = FALSE
   ))
   

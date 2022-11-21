@@ -1,14 +1,16 @@
 #!/bin/sh
 
-plink="$HOME/Downloads/plink"
-prjfolder="$HOME/Documents/chiara/imputation"
-inputfile="Analysis/simdata/filtered_data/combined_18k_filtered"
-outdir="Analysis/peach/stats"
+plink="/home/biscarinif/software/plink/plink"
+prjfolder="$HOME/imputation"
+inputfile="Analysis/goat/filtered_data/goat_filtered"
+outdir="Analysis/goat/stats"
 
 pairs=()
 
 fname="$outdir/keep.fam"
-set -- CxEL DxP pop001 pop004
+#set -- CxEL DxP pop001 pop004
+#set -- POP1 POP2 POP3
+set -- ALP ANG BOE BRK CRE LNR
 for a; do
     shift
     for b; do
@@ -20,5 +22,4 @@ for a; do
     done
 done
 
-#$plink --cow --allow-extra-chr --bfile $prjfolder/$inputfile --family --fst --out $outdir/dist
-
+echo "DONE!"
