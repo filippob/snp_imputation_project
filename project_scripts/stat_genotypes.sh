@@ -2,9 +2,9 @@
 
 ## PARAMETERS
 prjfolder="$HOME/imputation"
-outdir="$prjfolder/Analysis/peach/stats"
-datafolder="/home/freeclimb/data/peach/SNP_array"
-dataset="CxEL_filtered"
+outdir="$prjfolder/Analysis/goat/stats"
+datafolder="/home/freeclimb/data/goat"
+dataset="ANG"
 
 ## SOFTWARE
 plink="$HOME/software/plink/plink"

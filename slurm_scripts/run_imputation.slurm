@@ -5,7 +5,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1                    # Run on a single task
 #SBATCH --cpus-per-task=1             # Declare 1 CPUs per task
-#SBATCH --mem=16gb                     # Job memory request
+#SBATCH --mem=2gb                     # Job memory request
 #SBATCH --output=/home/biscarinif/imputation/log/densityimp_%j.log   # Standard output and error log
 
 ## !! REMEMBER: CHANGE CONFIG FILE TO USE THE BEAGLE SINGULARITY CONTAINER !!

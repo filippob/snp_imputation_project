@@ -2,9 +2,9 @@
 
 ## SETUP
 prjfolder="$HOME/imputation"
-outdir="$prjfolder/Analysis/peach/filtered_data"
-datafolder="/home/freeclimb/data/peach/SNP_array"
-dataset="pop004_filtered"
+outdir="$prjfolder/Analysis/simdata/filtered_data"
+datafolder="/home/freeclimb/data/simdata"
+dataset="line3"
 
 ## SOFTWARE
 plink="$HOME/software/plink/plink"
@@ -22,6 +22,6 @@ if [ ! -d $outdir ]; then
 fi	       
 
 echo "run Plink to produce basic stats on genotypes"
-$plink --$species --allow-extra-chr --bfile ${datafolder}/$dataset --maf $maf --mac $mac --mind $mind --geno $geno --bp-space 1 --snps-only 'just-acgt' --make-bed --out $outdir/$dataset
+$plink --$species --allow-extra-chr --bfile ${datafolder}/$dataset --maf $maf --mac $mac --mind $mind --geno $geno --bp-space 1 --snps-only 'just-acgt' --make-bed --out $outdir/${dataset}_filtered
 
 echo "DONE!"

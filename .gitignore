@@ -5,3 +5,6 @@ Analysis/*
 ## third-party repo with software
 heterogeneousImputation
 heterogeneousImputation/*
+
+## log files
+log/*
