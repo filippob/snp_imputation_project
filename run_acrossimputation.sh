@@ -2,15 +2,18 @@
 
 ## script to run a single imputation experiment under the low-to-high density scenario
 
+## FROM THE COMMAND LINE
+inputfile=$1
+pops=($2) ## transform the input string into an array (space separated input string)
+relationship=$3 ## close or distant, depennding on average pairwise Fst
+
 ## SETUP
-relationship="distant" ## close or distant, depennding on average pairwise Fst
 prjfolder="$HOME/imputation"
 dataset="peach" #name of dataset folder in Analysis/
 outdir="Analysis/$dataset/across_imputation"
 datafolder="$prjfolder/Analysis/$dataset/filtered_data"
 repofolder="heterogeneousImputation"
 configf="$prjfolder/$repofolder/config.sh"
-inputfile=$1
 
 ## peach (or species where we do have a LD SNP array) ##
 ld_array="/home/freeclimb/data/peach/SNP_array/snp_names.9k"
@@ -25,7 +28,6 @@ plink="$HOME/software/plink/plink"
 species="cow"
 
 ## PARAMETERS
-pops=('CxEL' 'pop001' 'pop004')
 breed='CxEL'
 nsize=300
 
@@ -34,6 +36,7 @@ if [ ! -d $outdir ]; then
         mkdir -p $outdir
 fi
 
+#echo "subsetting these populations: $pops"
 tmpname=$outdir/keep.fam
 
 if [ -f $tmpname ]; then
@@ -53,7 +56,7 @@ echo "---------"
 
 $plink --cow --allow-extra-chr --bfile $prjfolder/$inputfile --keep-fam $tmpname --make-bed --out $outdir/$relationship
 
-echo " - running the low-to-high density imputation workflow"
+echo " - running the across-population imputation workflow"
 bash $prjfolder/$repofolder/imputationAcrossBreeds_workflow.sh -f $outdir/$relationship -s $species -d ${ld_array} -n $nsize -b $breed -o $prjfolder/$outdir -c $configf
 
 echo "DONE!"
