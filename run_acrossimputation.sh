@@ -1,11 +1,14 @@
 #!/bin/sh
 
 ## script to run a single imputation experiment under the low-to-high density scenario
+## bash run_acrossimputation.sh $datafolder/$dataset $pops "$pop" $sample_size $relationship 
 
 ## FROM THE COMMAND LINE
 inputfile=$1
 pops=($2) ## transform the input string into an array (space separated input string)
-relationship=$3 ## close or distant, depennding on average pairwise Fst
+target_pop=$3
+sample_size=$4
+relationship=$5 ## close or distant, depennding on average pairwise Fst
 
 ## SETUP
 prjfolder="$HOME/imputation"
@@ -28,8 +31,8 @@ plink="$HOME/software/plink/plink"
 species="cow"
 
 ## PARAMETERS
-breed='CxEL'
-nsize=300
+breed=$target_pop
+nsize=$sample_size
 
 if [ ! -d $outdir ]; then
         echo "making folder $outdir"
