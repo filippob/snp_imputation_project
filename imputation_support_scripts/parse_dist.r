@@ -13,9 +13,9 @@ if (length(args) == 1){
   config = NULL
   config = rbind(config, data.frame(
     base_folder = '/home/biscarinif/imputation',
-    stat_folder = 'Analysis/goat/stats',
-    dataset = 'goat_filtered', ## name of dataset
-    outdir = 'Analysis/goat/stats',
+    stat_folder = 'Analysis/maize/stats',
+    dataset = 'maize_filtered', ## name of dataset
+    outdir = 'Analysis/maize/stats',
     force_overwrite = FALSE
   ))
   
@@ -60,7 +60,7 @@ print("PAIRWISE DISTANCES")
 print(dists)
 
 writeLines(" - write out results")
-fname = file.path(config$outdir, "parwise.dist")
+fname = file.path(config$outdir, "pairwise.dist")
 fwrite(x = dists, file = fname, sep = ",")
 
 print("DONE!!")

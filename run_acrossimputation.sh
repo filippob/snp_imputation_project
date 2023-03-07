@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ## script to run a single imputation experiment under the low-to-high density scenario
-## bash run_acrossimputation.sh $datafolder/$dataset $pops "$pop" $sample_size $relationship 
+## bash run_acrossimputation.sh $datafolder/$dataset $pops "$pop" $sample_size $relationship $species $ld_array
 
 ## FROM THE COMMAND LINE
 inputfile=$1
@@ -9,17 +9,27 @@ pops=($2) ## transform the input string into an array (space separated input str
 target_pop=$3
 sample_size=$4
 relationship=$5 ## close or distant, depennding on average pairwise Fst
+species=$6
+ld_array=$7 ## es. "/home/freeclimb/data/goat"
 
 ## SETUP
 prjfolder="$HOME/imputation"
-dataset="peach" #name of dataset folder in Analysis/
+dataset=$species #name of dataset folder in Analysis/
 outdir="Analysis/$dataset/across_imputation"
 datafolder="$prjfolder/Analysis/$dataset/filtered_data"
 repofolder="heterogeneousImputation"
 configf="$prjfolder/$repofolder/config.sh"
 
-## peach (or species where we do have a LD SNP array) ##
-ld_array="/home/freeclimb/data/peach/SNP_array/snp_names.9k"
+if [ $species == "peach" ];
+then
+	
+	## peach (or species where we do have a LD SNP array) ##
+	ld_array=${ld_array}
+else
+	## maize (or species for which we generate random LD SNP arrays) ##
+	nint=$((1 + $RANDOM % 10))
+	ld_array="${datafolder}/${species}_bootstrap_${nint}.txt"
+fi
 
 ## maize (or species for which we generate random LD SNP arrays) ##
 nint=$((1 + $RANDOM % 10))
