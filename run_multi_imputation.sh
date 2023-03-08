@@ -2,18 +2,26 @@
 
 ## script to run multiple times the imputation experiments
 
+
+## !! TO REMEMBER !! ##################################
+# check config.sh in heterogenousImputation
+# 1) set label (AGROSS, GAP, DENSITY, MIXED)
+# 2) set singularity container if running through slurm
+#######################################################
+
 ##########################################################
 ## PARAMETERS
 ##########################################################
-datafolder="Analysis/goat/filtered_data"
-pops="ANG CRE BRK"
-target=""
-sample_size=300
-relationship="close" ## for across-population experiments
-dataset="goat_filtered"
-species="goat"
+datafolder="Analysis/maize/filtered_data"
+pops="nss ts"
+target="ts"
+sample_size=100
+relationship="distant" ## for across-population experiments
+dataset="maize_filtered" ## peach: combined_18k_filtered; goat: goat_filtered etc.
+species="maize"
 ld_array=""
-exp_type="ACROSS" ## ACROOS, DENSITY, (GAP?)
+#ld_array="/home/freeclimb/data/peach/SNP_array/snp_names.9k"
+exp_type="ACROSS" ## ACROSS, DENSITY, (GAP?)
 #########################################################
 
 n=1 ## n. of replicates to run
@@ -23,7 +31,7 @@ echo " - the desired number of replicates per dataset is $n"
 echo " - the type of relationships is $relationship"
 
 ## DENSITY IMP
-if [ $exp_type == "DENSITY" ];
+if [[ "$exp_type" == "DENSITY" ]];
 then
 	echo "Running low-to-high density imputation experiments"
 
@@ -34,20 +42,20 @@ then
 fi
 
 ## ACROSS IMP
-if [ $exp_type == "ACROSS" ];
+if [[ "${exp_type}" == "ACROSS" ]];
 then
         echo "Running across-population imputation experiments"
 	echo "-----------"
-	echo "SUBSET DATA"
-	for pop in ${pops[@]}; do
-		echo $pop >> $tmpname
-		printf "$pop\n"
-	done
+	#echo "SUBSET DATA"
+	#for pop in ${pops[@]}; do
+	#	echo $pop >> $tmpname
+	#	printf "$pop\n"
+	#done
 	echo "---------"
 
-	if [ $target == "" ];
+	if [[ "$target" == "" ]];
 	then
-
+		echo "Running analysis with rotating target (unspecified)"
 		for pop in ${pops[@]};
 		do
 			echo "Analysing data from $pop"
@@ -55,7 +63,8 @@ then
 			do	
 				echo "running replicate $i on dataset $dataset"
 				#bash run_densityimputation.sh $datafolder/$dataset
-				bash run_acrossimputation.sh $datafolder/$dataset "$pops" "$pop" $sample_size $relationship $species $ld_array
+				bash run_acrossimputation.sh $datafolder/$dataset "$pops" $pop $sample_size $relationship $species $ld_array
+				#echo "run_acrossimputation.sh $datafolder/$dataset '$pops' $pop $sample_size $relationship $species $ld_array"
 			done
 		done
 	else
