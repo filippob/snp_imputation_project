@@ -1,13 +1,13 @@
 #!/bin/bash
 
 ## PARAMETERS
-prjfolder="$HOME/imputation"
+prjfolder="$HOME/Documents/chiara/imputation"
 outdir="$prjfolder/Analysis/goat/stats"
-datafolder="/home/freeclimb/data/goat"
-dataset="ANG"
+datafolder="data/goat"
+dataset="CRE"
 
 ## SOFTWARE
-plink="$HOME/software/plink/plink"
+plink="$HOME/Downloads/plink"
 species="cow"
 
 if [ ! -d $outdir ]; then
@@ -16,6 +16,6 @@ if [ ! -d $outdir ]; then
 fi	       
 
 echo "run Plink to produce basic stats on genotypes"
-$plink --$species --allow-extra-chr --bfile ${datafolder}/$dataset --freq --missing --out $outdir/$dataset
+$plink --$species --allow-extra-chr --bfile ${datafolder}/$dataset --freq --missing --het --out $outdir/$dataset
 
 echo "DONE!"
