@@ -1,20 +1,20 @@
 #!/bin/bash
 
 ## SETUP
-prjfolder="$HOME/imputation"
-outdir="$prjfolder/Analysis/simdata/filtered_data"
-datafolder="/home/freeclimb/data/simdata"
-dataset="line3"
+prjfolder="$HOME/Documents/chiara/imputation"
+outdir="$prjfolder/data/goat/filtered_data"
+datafolder="data/goat"
+dataset="LNR"
 
 ## SOFTWARE
-plink="$HOME/software/plink/plink"
+plink="$HOME/Downloads/plink"
 species="cow"
 
 ## PARAMETERS
 maf=0.01
-mac=0
-geno=0.2
-mind=0.2
+mac=4
+geno=0.05
+mind=0.20
 
 if [ ! -d $outdir ]; then
 	echo "making folder $outdir"
