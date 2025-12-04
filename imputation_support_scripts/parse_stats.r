@@ -13,9 +13,10 @@ if (length(args) == 1){
   config = NULL
   config = rbind(config, data.frame(
     base_folder = '~/Documents/chiara/imputation',
-    stat_folder = 'Analysis/peach/stats',
-    dataset = 'combined_18k', ## name of dataset
-    outdir = 'Analysis/peach/stats',
+    stat_folder = 'Analysis/goat/stats',
+    dataset = 'ALP', ## name of dataset
+    outdir = 'Analysis/goat/stats',
+    species = 'goat',
     force_overwrite = FALSE
   ))
   
@@ -41,6 +42,10 @@ print(paste("Population name: ", config$dataset, "Number of markers: ", nrow(fre
 freq$class = cut(freq$MAF, breaks = c(-Inf,0,0.01,0.025,0.05,0.10,0.5))
 group_by(freq, class) %>% summarise(N=n())
 
+freqs <- freq |>
+  summarise(avg_maf = mean(MAF))
+print(freqs)
+
 p <- ggplot(freq, aes(MAF)) + geom_histogram(binwidth = 0.01)
 fname = paste(file.path(config$stat_folder, config$dataset),".frq.histogram.png", sep="")
 ggsave(filename = fname, plot = p, device = "png", width = 7, height = 5)
@@ -57,6 +62,10 @@ group_by(temp, class) %>% summarise(N=n())
 
 print(paste("Max per-sample missing rate:", max(temp$F_MISS)))
 
+imiss <- temp |>
+  summarise(max_imiss = max(F_MISS))
+print(imiss)
+
 p <- ggplot(temp, aes(F_MISS)) + geom_histogram(binwidth = 0.01)
 fname = paste(file.path(config$stat_folder, config$dataset),".imiss.histogram.png", sep="")
 ggsave(filename = fname, plot = p, device = "png", width = 7, height = 5)
@@ -72,10 +81,40 @@ group_by(temp, class) %>% summarise(N=n())
 
 print(paste("Max per-SNP missing rate:", max(temp$F_MISS)))
 
+lmiss <- temp |>
+  summarise(avg_lmiss = mean(F_MISS),
+            max_lmiss = max(F_MISS))
+print(lmiss)
+
 p <- ggplot(temp, aes(F_MISS)) + geom_histogram(binwidth = 0.01)
 fname = paste(file.path(config$stat_folder, config$dataset),".lmiss.histogram.png", sep="")
 print(paste("saving plot to", fname))
 ggsave(filename = fname, plot = p, device = "png", width = 7, height = 5)
+
+### het
+writeLines("\n")
+writeLines(" - per-SNP heterozygosity")
+fname = paste(file.path(config$stat_folder, config$dataset),".het", sep="")
+temp <- fread(fname)
+
+hets <- temp |>
+  summarise(avg_HObs = mean(`O(HOM)`/`N(NM)`),
+            avg_HExp = mean(`E(HOM)`/`N(NM)`),
+            avgF = mean(F))
+
+print(hets)
+
+p <- ggplot(temp, aes(F)) + geom_histogram(binwidth = 0.01)
+fname = paste(file.path(config$stat_folder, config$dataset),".F.histogram.png", sep="")
+print(paste("saving plot to", fname))
+ggsave(filename = fname, plot = p, device = "png", width = 7, height = 5)
+
+## output dataframe
+df = data.frame("species" = config$species, "dataset"=config$dataset)
+df =cbind.data.frame(df, freqs, imiss, lmiss, hets)
+
+fname = paste(file.path(config$stat_folder, config$dataset),"-stats.csv", sep="")
+fwrite(x = df, file = fname, sep = ",")
 
 print("DONE!!")
 
