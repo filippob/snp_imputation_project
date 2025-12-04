@@ -2,14 +2,17 @@
 
 ## PARAMETERS
 prjfolder="$HOME/Documents/chiara/imputation"
-outdir="$prjfolder/data/goat/"
-datafolder="data/goat/"
-dataset="goat"
+outdir="$prjfolder/data/cattle"
+datafolder="data/cattle/THISISREALLYEVERYTHING"
+dataset="PLINK_QC_PABLO_TUTTO"
 selected_pops="breeds_to_keep"
+chr1=1
+chr_last=29
+label="cattle"
 
 ## SOFTWARE
 plink="$HOME/Downloads/plink"
-species="goat"
+species="cow"
 
 if [ ! -d $outdir ]; then
 	echo "making folder $outdir"
@@ -23,6 +26,6 @@ fi
 echo "Species is: $species"
 
 echo "run Plink to clean genotype data"
-$plink --$species --allow-extra-chr --bfile ${datafolder}/$dataset --chr 1-29 --keep-fam ${datafolder}/${selected_pops} --make-bed --out $outdir/${dataset}_cleaned
+$plink --$species --allow-extra-chr --bfile ${datafolder}/$dataset --chr ${chr1}-${chr_last} --keep-fam ${datafolder}/${selected_pops} --make-bed --out $outdir/${label}_cleaned
 
 echo "DONE!"
