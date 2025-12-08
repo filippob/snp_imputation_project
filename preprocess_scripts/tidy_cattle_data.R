@@ -47,4 +47,6 @@ filter(temp, fid_new == "HOL") |> pull(iid_new) |> length()
 
 newids = cbind.data.frame(oldids, temp)
 
+rm(temp)
+
 fwrite(newids, "data/cattle/THISISREALLYEVERYTHING/ids.upd", col.names = FALSE, quote = FALSE, sep = "\t")
