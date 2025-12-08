@@ -14,7 +14,7 @@ if (length(args) == 1){
   config = rbind(config, data.frame(
     base_folder = '~/Documents/chiara/imputation',
     exp_folder = 'Analysis/cattle/gap_imputation',
-    dataset = 'HOL_filtered', ## name of dataset
+    # dataset = 'ts_filtered', ## name of dataset
     outdir = 'Analysis/cattle/results',
     force_overwrite = FALSE
   ))
@@ -105,6 +105,21 @@ dir.create(file.path(config$base_folder, config$outdir), showWarnings = FALSE)
 fname = file.path(config$base_folder, config$outdir, paste("summary_", exp_label, ".csv", sep=""))
 fwrite(x = dd, file = fname, sep = ",")
 
+#######################################
+## std deviation for kappa
+dn <- df |> 
+  group_by(experiment_name, sample_size, proportion_missing) |>
+  summarise(std = sd(kappa)) |>
+  spread(key = sample_size, value = std)
+
+print(dn)
+
+fname = file.path(config$base_folder, config$outdir, paste("std_kappa_", exp_label, ".csv", sep=""))
+fwrite(x = dn, file = fname, sep = ",")
+#######################################
+
+#######################################
+## n. of experiments run
 dn <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(N = n()) |>
@@ -114,6 +129,20 @@ print(dn)
 
 fname = file.path(config$base_folder, config$outdir, paste("exp_plan_", exp_label, ".csv", sep=""))
 fwrite(x = dn, file = fname, sep = ",")
+#######################################
+
+#######################################
+## n. of missing SNP genotypes
+dn <- df |> 
+  group_by(experiment_name, sample_size, proportion_missing) |>
+  summarise(n_miss = round(mean(injectedMissing),1)) |>
+  spread(key = sample_size, value = n_miss)
+
+print(dn)
+
+fname = file.path(config$base_folder, config$outdir, paste("num_missing_", exp_label, ".csv", sep=""))
+fwrite(x = dn, file = fname, sep = ",")
+#######################################
 
 df$sample_size = factor(df$sample_size, levels = c("100","80","60","40","20"))
 
@@ -122,7 +151,7 @@ p <- p + stat_summary(
   fun = mean,
   geom = 'line',
   aes(group = experiment_name, colour = experiment_name),
-  size = 1.25,
+  linewidth = 1.25,
   position = position_dodge(width = 0.95) #this has to be added
 )
 p <- p + facet_wrap(~proportion_missing)
@@ -156,7 +185,7 @@ maxerr = names(which.max(table(df$which_worst)))
 
 q <- ggplot(df, aes(x = sample_size, y = (1-worst))) 
 q <- q + geom_jitter(aes(color=experiment_name), alpha=0.2, position = position_jitter(seed = 1))
-q <- q + geom_line(data = df_mean, mapping = aes(x = sample_size, y = avg, group=experiment_name, color = experiment_name), size = 1.5)
+q <- q + geom_line(data = df_mean, mapping = aes(x = sample_size, y = avg, group=experiment_name, color = experiment_name), linewidth = 1.5)
 q <- q + facet_wrap(~proportion_missing)
 q <- q + ylab("average worst error")
 # q <- q +  geom_label(data=df %>% filter(which_worst != "accuracyBB"), aes(label=lab, color = lab), label.size = 0.2) 

@@ -13,7 +13,7 @@ if (length(args) == 1){
   config = NULL
   config = rbind(config, data.frame(
     base_folder = '~/Documents/chiara/imputation/Analysis',
-    experiment = 'across_imputation',
+    experiment = 'gap_imputation',
     dataset = 'line1_filtered', ## name of dataset
     outdir = 'results',
     force_overwrite = FALSE
@@ -42,7 +42,7 @@ writeLines(" - reading data")
 setwd(config$base_folder)
 
 df = data.frame(NULL)
-species_list = c("goat","peach","maize","simdata")
+species_list = c("goat", "cattle", "peach","maize","simdata")
 
 for (species in species_list) {
   
@@ -86,7 +86,7 @@ if (exp_label == "gap") {
   
   df$experiment_name = gsub("_filtered","",df$experiment_name)
   df$sample_size = factor(df$sample_size, levels = c("100","80","60","40","20"))
-  df$experiment_name <- factor(df$experiment_name, levels = c("ALP","ANG","BOE","BRK","CRE","LNR","mixed","nss",
+  df$experiment_name <- factor(df$experiment_name, levels = c("ALP","ANG","BOE","BRK","CRE","LNR","ANGUS","HOL","LMS","mixed","nss",
                                                               "ts","CxEL","DxP","pop001","pop004","line1","line2","line3"))
   
   p <- ggplot(df, aes(x = sample_size, y = kappa)) + geom_boxplot(aes(fill=experiment_name), alpha = 0.5)
@@ -101,6 +101,10 @@ if (exp_label == "gap") {
   p <- p + xlab("sample size")
   
 }
+
+fname = file.path(config$base_folder, config$outdir, paste("kappa_all_",exp_label,".png", sep = ""))
+ggsave(filename = fname, plot = p, device = "png", width = 9, height = 10)
+
 
 ## DENSITY IMP
 if (exp_label == "density") {
