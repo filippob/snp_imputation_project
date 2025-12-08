@@ -13,9 +13,9 @@ if (length(args) == 1){
   config = NULL
   config = rbind(config, data.frame(
     base_folder = '~/Documents/chiara/imputation',
-    exp_folder = 'Analysis/peach/gap_imputation',
-    dataset = 'line1_filtered', ## name of dataset
-    outdir = 'Analysis/peach/results',
+    exp_folder = 'Analysis/cattle/gap_imputation',
+    dataset = 'HOL_filtered', ## name of dataset
+    outdir = 'Analysis/cattle/results',
     force_overwrite = FALSE
   ))
   
@@ -104,6 +104,16 @@ print(dd)
 dir.create(file.path(config$base_folder, config$outdir), showWarnings = FALSE)
 fname = file.path(config$base_folder, config$outdir, paste("summary_", exp_label, ".csv", sep=""))
 fwrite(x = dd, file = fname, sep = ",")
+
+dn <- df |> 
+  group_by(experiment_name, sample_size, proportion_missing) |>
+  summarise(N = n()) |>
+  spread(key = sample_size, value = N)
+
+print(dn)
+
+fname = file.path(config$base_folder, config$outdir, paste("exp_plan_", exp_label, ".csv", sep=""))
+fwrite(x = dn, file = fname, sep = ",")
 
 df$sample_size = factor(df$sample_size, levels = c("100","80","60","40","20"))
 
