@@ -12,23 +12,41 @@
 ##########################################################
 ## PARAMETERS
 ##########################################################
-datafolder="Analysis/maize/filtered_data"
+datafolder="data/sheep/filtered_data"
 pops="nss ts"
 target="ts"
-sample_size=100
+sample_size=60
+missrate=0.1 ## for gap and mixed imputation experiments
 relationship="distant" ## for across-population experiments
-dataset="maize_filtered" ## peach: combined_18k_filtered; goat: goat_filtered etc.
-species="maize"
+dataset="AustralianSuffolk_filtered" ## peach: combined_18k_filtered; goat: goat_filtered etc.
+species="sheep"
 ld_array=""
 #ld_array="/home/freeclimb/data/peach/SNP_array/snp_names.9k"
-exp_type="ACROSS" ## ACROSS, DENSITY, (GAP?)
+exp_type="GAP" ## ACROSS, DENSITY, GAP
 #########################################################
 
-n=1 ## n. of replicates to run
+n=3 ## n. of replicates to run
 
 echo " - data folder is $datafolder"
 echo " - the desired number of replicates per dataset is $n"
 echo " - the type of relationships is $relationship"
+
+## GAP IMP
+if [[ "$exp_type" == "GAP" ]];
+then
+	echo "Running gap-imputation experiments"
+
+	for i in $(seq 1 $n);
+	do
+		echo "running replicate $i on dataset $dataset"
+		bash snp_imputation_project/run_gapimputation.sh $datafolder/$dataset $missrate $sample_size $species
+	done
+
+	#for dataset in line1_filtered line2_filtered line3_filtered;
+	#for dataset in nss_filtered;
+	#for dataset in CxEL_filtered DxP_filtered pop001_filtered pop004_filtered;
+	#for dataset in ALP_filtered ANG_filtered BRK_filtered BOE_filtered CRE_filtered LNR_filtered;
+fi
 
 ## DENSITY IMP
 if [[ "$exp_type" == "DENSITY" ]];
