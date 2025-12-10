@@ -119,6 +119,20 @@ dir.create(file.path(config$base_folder, config$outdir), showWarnings = FALSE)
 fname = file.path(config$base_folder, config$outdir, paste("summary_", exp_label, ".csv", sep=""))
 fwrite(x = dd, file = fname, sep = ",")
 
+#######################################
+## n. of experiments run
+dn <- df |> 
+  group_by(dataset, sample_size, ld_size) |>
+  summarise(N = n()) |>
+  spread(key = sample_size, value = N)
+
+print(dn)
+
+fname = file.path(config$base_folder, config$outdir, paste("exp_plan_", exp_label, ".csv", sep=""))
+fwrite(x = dn, file = fname, sep = ",")
+#######################################
+
+
 df$sample_size = factor(df$sample_size, levels = c("100","80","60"))
 
 p <- ggplot(df, aes(x = ld_size, y = kappa)) + geom_boxplot(aes(fill=dataset), alpha = 0.5)
