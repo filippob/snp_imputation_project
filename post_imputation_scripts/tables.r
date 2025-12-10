@@ -15,7 +15,7 @@ outdir = 'results/tables'
 
 ## avg kappa
 df = data.frame(NULL)
-species_list = c("goat","cattle","peach","maize","simdata")
+species_list = c("goat","cattle","sheep","peach","maize","simdata")
 
 for (species in species_list) {
   
@@ -51,7 +51,7 @@ fwrite(df, file = file.path(base_folder, outdir, fname))
 
 ## standard deviation of kappa
 df = data.frame(NULL)
-species_list = c("goat","cattle","peach","maize","simdata")
+species_list = c("goat","cattle","sheep","peach","maize","simdata")
 
 for (species in species_list) {
   
@@ -87,7 +87,7 @@ fwrite(df, file = file.path(base_folder, outdir, fname))
 
 ## experimental plan
 df = data.frame(NULL)
-species_list = c("goat","cattle","peach","maize","simdata")
+species_list = c("goat","cattle","sheep","peach","maize","simdata")
 
 for (species in species_list) {
   
@@ -123,7 +123,7 @@ fwrite(df, file = file.path(base_folder, outdir, fname))
 
 ## number of missing genotypes (size of the problem)
 df = data.frame(NULL)
-species_list = c("goat","cattle","peach","maize","simdata")
+species_list = c("goat","cattle","sheep","peach","maize","simdata")
 
 for (species in species_list) {
   
