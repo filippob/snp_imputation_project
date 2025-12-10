@@ -4,11 +4,11 @@ import os
 import re
 
 ## define path to input map file ##
-prjfolder = '/home/biscarinif/imputation'
-fname = '/home/freeclimb/data/simdata/lm_mrk.map'
-outdir = os.path.join(prjfolder, 'Analysis/simdata/filtered_data')
+prjfolder = '/home/filippo/Documents/chiara/imputation'
+fname = 'data/cattle/cattle_cleaned.map'
+outdir = os.path.join(prjfolder, 'data/cattle/filtered_data')
 nreplicates = 10 ## n. of bootstrapping replicates of the data
-nld = 5000 ## for maize nld = 8144, as in peach (althoug HD is 47k in maize and 18k in peach); nld = 7065 in goats (why? As in sheep/cattle?); nld = 5000 for simdata (half of the original simulated SNP array)
+nld = 7000 ## for maize nld = 8144, as in peach (althoug HD is 47k in maize and 18k in peach); nld = 7065 in goats (why? As in sheep/cattle?); nld = 5000 for simdata (half of the original simulated SNP array)
 
 print('input file is', os.path.join(prjfolder, fname))
 print('outdir is', outdir)
