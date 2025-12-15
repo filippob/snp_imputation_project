@@ -10,39 +10,40 @@ target_pop=$3
 sample_size=$4
 relationship=$5 ## close or distant, depennding on average pairwise Fst
 species=$6
-ld_array=$7 ## es. "/home/freeclimb/data/goat"
+#ld_array=$7 ## es. "/home/freeclimb/data/goat"
 
 ## SETUP
-prjfolder="$HOME/imputation"
+prjfolder="$HOME/Documents/chiara/imputation"
 dataset=$species #name of dataset folder in Analysis/
 outdir="Analysis/$dataset/across_imputation"
-datafolder="$prjfolder/Analysis/$dataset/filtered_data"
+datafolder="$prjfolder/data/$dataset/filtered_data"
 repofolder="heterogeneousImputation"
 configf="$prjfolder/$repofolder/config.sh"
 
-if [ $species == "peach" ];
-then
-	
-	## peach (or species where we do have a LD SNP array) ##
-	ld_array=${ld_array}
-else
-	## maize (or species for which we generate random LD SNP arrays) ##
-	nint=$((1 + $RANDOM % 10))
-	ld_array="${datafolder}/${species}_bootstrap_${nint}.txt"
-fi
-
-## maize (or species for which we generate random LD SNP arrays) ##
-nint=$((1 + $RANDOM % 10))
-#ld_array="${datafolder}/goat_bootstrap_${nint}.txt"
-##
-
 ## SOFTWARE
-plink="$HOME/software/plink/plink"
+plink="$HOME/Downloads/plink"
 species="cow"
+
+#if [ $species == "peach" ];
+#then
+	
+#	## peach (or species where we do have a LD SNP array) ##
+#	ld_array=${ld_array}
+#else
+	## maize (or species for which we generate random LD SNP arrays) ##
+#	nint=$((1 + $RANDOM % 10))
+#	ld_array="${datafolder}/${species}_bootstrap_${nint}.txt"
+#fi
 
 ## PARAMETERS
 breed=$target_pop
 nsize=$sample_size
+
+## LD ARRAY
+## maize (or species for which we generate random LD SNP arrays) ##
+nint=$((1 + $RANDOM % 10))
+ld_array="${datafolder}/${dataset}_cleaned_bootstrap_${nint}.txt"
+##
 
 if [ ! -d $outdir ]; then
         echo "making folder $outdir"
@@ -73,3 +74,5 @@ echo " - running the across-population imputation workflow"
 bash $prjfolder/$repofolder/imputationAcrossBreeds_workflow.sh -f $outdir/$relationship -s $species -d ${ld_array} -n $nsize -b $breed -o $prjfolder/$outdir -c $configf
 
 echo "DONE!"
+
+
