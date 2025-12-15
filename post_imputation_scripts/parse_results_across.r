@@ -13,10 +13,10 @@ if (length(args) == 1){
   config = NULL
   config = rbind(config, data.frame(
     base_folder = '~/Documents/chiara/imputation',
-    exp_folder = 'Analysis/simdata/across_imputation',
+    exp_folder = 'Analysis/goat/across_imputation',
     dataset = '', ## name of dataset, if needed
-    outdir = 'Analysis/simdata/results',
-    threshold = 0.03, # threshold between close and distant populations (in terms of Fst)
+    outdir = 'Analysis/goat/results',
+    threshold = 0.07, # threshold between close and distant populations (in terms of Fst)
     force_overwrite = FALSE
   ))
   
@@ -24,6 +24,14 @@ if (length(args) == 1){
 
 
 ### MANUALLY CHANGE
+fst = c("ALP_ANG" = 0.121847,
+"ALP_BOE" = 0.158754,
+"ALP_LNR" = 0.064018,
+"ANG_BOE" = 0.119646,
+"ANG_LNR" = 0.115704,
+"BOE_LNR" = 0.157933
+)
+
 # fst = c("ALP_BOE" =
 #           0.158778062,
 #         "BOE_LNR" =
@@ -57,12 +65,12 @@ if (length(args) == 1){
 # "pop001_pop004" =
 # 0.169149331295934)
 
-fst = c("POP1_POP2" =
-0.04342194,
-"POP1_POP3" =
-0.01455634,
-"POP2_POP3" =
-0.04019463)
+# fst = c("POP1_POP2" =
+# 0.04342194,
+# "POP1_POP3" =
+# 0.01455634,
+# "POP2_POP3" =
+# 0.04019463)
 
 
 
@@ -85,6 +93,7 @@ exp_label = sub("_imputation", "", expname)
 writeLines(" - reading data")
 setwd(config$base_folder)
 
+## accuracy
 list_of_files <- list.files(path = file.path(config$base_folder, config$exp_folder),
                             recursive = TRUE,
                             pattern = "results.csv",
@@ -95,6 +104,47 @@ print(paste("reading", length(list_of_files), "files from folder", config$exp_fo
 df <- list_of_files %>%
   set_names() %>% 
   map_df(read_csv, .id = "file_name", show_col_types = FALSE) 
+
+
+## target
+list_of_files <- list.files(path = file.path(config$base_folder, config$exp_folder),
+                            recursive = TRUE,
+                            pattern = "keep.ids",
+                            full.names = TRUE)
+
+target <- list_of_files %>%
+  set_names() %>% 
+  map_df(read_csv, col_names = FALSE, .id = "file_name", show_col_types = FALSE) 
+
+target$X1 = gsub(" .*$","",target$X1)
+target <- unique(target)
+target$file_name = gsub("keep.ids","",target$file_name)
+target <- rename(target, target = X1)
+
+## reference
+list_of_files <- list.files(path = file.path(config$base_folder, config$exp_folder),
+                            recursive = TRUE,
+                            pattern = "keepIDs.txt",
+                            full.names = TRUE)
+
+pops <- list_of_files %>%
+  set_names() %>% 
+  map_df(read_csv, col_names = FALSE, .id = "file_name", show_col_types = FALSE) 
+
+pops$X1 = gsub(" .*$","",pops$X1)
+pops <- unique(pops)
+pops$file_name = gsub("keepIDs.txt","",pops$file_name)
+pops <- rename(pops, reference = X1)
+
+temp <- pops |> inner_join(target, by = "file_name")
+temp <- temp |>
+  group_by(file_name) |>
+  summarise(target = unique(target), 
+            reference = paste(setdiff(unique(reference), target), collapse = ",")
+              )
+
+df$file_name = gsub("results.csv","",df$file_name)
+df <- df |> inner_join(temp, by = "file_name")
 
 ## !! problem with experiment name: check code !!
 df <- df |> 
@@ -109,17 +159,26 @@ df <- df |>
   select(-c(other))
 
 ### ADD AVERAGE FST PER TYPE OF RELATIONSHIP AND TARGET POPULATION
-replace_pattern <- function(x,lst) {
+replace_pattern <- function(target, reference, lst) {
   
-  vec <- grep(pattern = x, names(lst))
-  avg = mean(lst[vec])
+  reference = gsub(" ", "", reference)
+  reference = unlist(strsplit(reference, split = ","))
+  values = c(NULL)
+  for (ref in reference) {
+    pair1 = paste(target, ref, sep = "_")
+    if (pair1 %in% names(lst)) values = c(values, fst[[pair1]])
+    pair2 = paste(ref, target, sep = "_")
+    if (pair2 %in% names(lst)) values = c(values, fst[[pair2]])
+  }
+  
+  avg = mean(values)
   return(avg)
 }
 
 df <- df |> 
   group_by(relationship) |>
   rowwise() |>
-  mutate(Fst = replace_pattern(missing_population, fst))
+  mutate(Fst = replace_pattern(target, reference, fst))
 
 
 # df$sample_size = ifelse(df$sample_size == 59, 60, df$sample_size)
@@ -128,32 +187,35 @@ df <- df |>
 # df <- df |> filter(sample_size != 80)
 ################################################
 
-dd <- group_by(df, dataset, relationship, missing_population, sample_size) |> summarise(N = n()) |> spread(key = sample_size, value = N)
+df <- df |>
+  mutate(missing_population = target)
+
+dd <- group_by(df, dataset, reference, missing_population, sample_size) |> summarise(N = n()) |> spread(key = sample_size, value = N)
 print(dd)
 
 dd <- df |> 
-  group_by(dataset, populations, relationship, missing_population, sample_size) |>
+  group_by(dataset, reference, missing_population, sample_size) |>
   summarise(avg = mean(totalAccuracy)) |>
   spread(key = sample_size, value = avg)
 
 print(dd)
 
 dd <- df |> 
-  group_by(dataset, populations, relationship, missing_population, sample_size) |>
+  group_by(dataset, relationship, reference, missing_population, sample_size) |>
   summarise(avg = mean(accuracyAA)) |>
   spread(key = sample_size, value = avg)
 
 print(dd)
 
 dd <- df |> 
-  group_by(dataset, populations, relationship, missing_population, sample_size) |>
+  group_by(dataset, relationship, reference, missing_population, sample_size) |>
   summarise(avg = mean(accuracyAB)) |>
   spread(key = sample_size, value = avg)
 
 print(dd)
 
 dd <- df |> 
-  group_by(dataset, populations, relationship, missing_population, sample_size) |>
+  group_by(dataset, relationship, reference, missing_population, sample_size) |>
   summarise(avg = mean(accuracyBB)) |>
   spread(key = sample_size, value = avg)
 
@@ -173,14 +235,16 @@ df <- df |>
          )
 
 dd <- df |>
-  group_by(dataset, populations, relationship, missing_population, sample_size) |>
+  group_by(dataset, relationship, reference, missing_population, sample_size) |>
   summarise(avg = mean(kappa)) |>
   spread(key = sample_size, value = avg)
 
 print(dd)
 
+df <- df |> mutate(ref_type = ifelse(grepl(",",reference), "mixed", "single"))
+
 dd <- df |> 
-  group_by(dataset, populations, relationship, missing_population, sample_size) |>
+  group_by(dataset, relationship, reference, missing_population, sample_size) |>
   summarise(avg = mean(kappa), avg_fst = mean(Fst),
             avg_snp = mean(n_SNP), 
             size_missing_population = mean(ld_sample_size),
@@ -195,15 +259,15 @@ df$sample_size = factor(df$sample_size, levels = sample_size_levels)
 
 ## highlight region data
 threshold = config$threshold
-rects <- data.frame(start=threshold, end=max(df$Fst) + 0.2*threshold)
+rects <- data.frame(start=threshold - 0.05*threshold, end=max(df$Fst) + 1.25*max(df$Fst))
 mink = min(df$kappa)
 maxk = max(df$kappa)
 minfst = min(df$Fst)
 maxfst = max(df$Fst)
 
 p <- ggplot(df, aes(x = Fst, y = kappa)) 
-p <- p + geom_jitter(aes(color=missing_population), alpha = 0.75, size=1.75) + xlim(minfst-0.2*abs(minfst),maxfst+0.5*maxfst)
-p <- p + facet_wrap(~sample_size)
+p <- p + geom_jitter(aes(color=missing_population), alpha = 0.75, size=1.75, width = 0.2)
+p <- p + facet_wrap(~ref_type)
 p <- p + xlab("Fst")
 p <- p + geom_rect(data=rects, inherit.aes=FALSE, 
               aes(xmin=start, xmax=end, ymin=(mink-0.10*abs(mink)),ymax=(maxk+0.1*maxk)), 
@@ -230,7 +294,7 @@ df$which_worst = df %>%
 # p <- p + ylab("error rate")
 
 df_mean <- df |>
-  group_by(populations, relationship, missing_population, sample_size) |>
+  group_by(reference, relationship, missing_population, sample_size) |>
   summarise(avg = mean(1-worst))
 
 df <- df |>
