@@ -21,6 +21,7 @@ for (species in species_list) {
   
   print(species)
   fname = paste("summary_", experiment,".csv", sep="")
+  resfolder = ifelse(experiment == "gap", "results", paste("results", experiment, sep="_"))
   list_of_files <- list.files(path = file.path(base_folder, species, "results"),
                               recursive = TRUE,
                               pattern = fname,
@@ -40,13 +41,23 @@ for (species in species_list) {
   df <- rbind.data.frame(df,temp)
 }
 
-df <- df |>
-  mutate(experiment_name = gsub("_filtered", "", experiment_name)) |>
-  rename(dataset = experiment_name)
+
+if (experiment == "gap") {
+  
+  df <- df |>
+    mutate(experiment_name = gsub("_filtered", "", experiment_name)) |>
+    rename(dataset = experiment_name)
+}
+
+### CAUTION !! CHECK FILTER WHEN NOT TEST !! ##
+df <- df |> filter(!grepl("SAA", dataset))
+df <- df |> filter(!grepl("pop001", dataset))
+df <- df |> filter(!(grepl("ANG", dataset) & species == "goat"))
+df <- df |> filter(!grepl("CRE", dataset))
+
 
 dir.create(file.path(base_folder, outdir), showWarnings = FALSE)
 fname = paste(experiment, "kappa", "avg.csv", sep="_")
-
 fwrite(df, file = file.path(base_folder, outdir, fname))
 
 ## standard deviation of kappa
@@ -76,9 +87,17 @@ for (species in species_list) {
   df <- rbind.data.frame(df,temp)
 }
 
-df <- df |>
-  mutate(experiment_name = gsub("_filtered", "", experiment_name)) |>
-  rename(dataset = experiment_name, miss_rate = proportion_missing, experiment = experiment_type)
+if (experiment == "gap") {
+  df <- df |>
+    mutate(experiment_name = gsub("_filtered", "", experiment_name)) |>
+    rename(dataset = experiment_name, miss_rate = proportion_missing, experiment = experiment_type)
+}
+
+### CAUTION !! CHECK FILTER WHEN NOT TEST !! ##
+df <- df |> filter(!grepl("SAA", dataset))
+df <- df |> filter(!grepl("pop001", dataset))
+df <- df |> filter(!(grepl("ANG", dataset) & species == "goat"))
+df <- df |> filter(!grepl("CRE", dataset))
 
 dir.create(file.path(base_folder, outdir), showWarnings = FALSE)
 fname = paste(experiment, "std", "kappa.csv", sep="_")
@@ -112,9 +131,18 @@ for (species in species_list) {
   df <- rbind.data.frame(df,temp)
 }
 
-df <- df |>
-  mutate(experiment_name = gsub("_filtered", "", experiment_name)) |>
-  rename(dataset = experiment_name, miss_rate = proportion_missing, experiment = experiment_type)
+
+if (experiment == "gap") {
+  df <- df |>
+    mutate(experiment_name = gsub("_filtered", "", experiment_name)) |>
+    rename(dataset = experiment_name, miss_rate = proportion_missing, experiment = experiment_type)
+}
+
+### CAUTION !! CHECK FILTER WHEN NOT TEST !! ##
+df <- df |> filter(!grepl("SAA", dataset))
+df <- df |> filter(!grepl("pop001", dataset))
+df <- df |> filter(!(grepl("ANG", dataset) & species == "goat"))
+df <- df |> filter(!grepl("CRE", dataset))
 
 dir.create(file.path(base_folder, outdir), showWarnings = FALSE)
 fname = paste(experiment, "experiment", "plan.csv", sep="_")
@@ -148,12 +176,26 @@ for (species in species_list) {
   df <- rbind.data.frame(df,temp)
 }
 
-df <- df |>
-  mutate(experiment_name = gsub("_filtered", "", experiment_name)) |>
-  rename(dataset = experiment_name, miss_rate = proportion_missing, experiment = experiment_type)
+if (experiment == "gap") {
+  df <- df |>
+    mutate(experiment_name = gsub("_filtered", "", experiment_name)) |>
+    rename(dataset = experiment_name, miss_rate = proportion_missing, experiment = experiment_type)
+}
+
+if (experiment == "density") {
+  df <- df |>
+    mutate(experiment_name = gsub("_filtered", "", experiment_name)) |>
+    rename(dataset = experiment_name, experiment = experiment_type)
+}
+
+
+### CAUTION !! CHECK FILTER WHEN NOT TEST !! ##
+df <- df |> filter(!grepl("SAA", dataset))
+df <- df |> filter(!grepl("pop001", dataset))
+df <- df |> filter(!(grepl("ANG", dataset) & species == "goat"))
+df <- df |> filter(!grepl("CRE", dataset))
 
 dir.create(file.path(base_folder, outdir), showWarnings = FALSE)
 fname = paste(experiment, "num", "missing.csv", sep="_")
-
 fwrite(df, file = file.path(base_folder, outdir, fname))
 

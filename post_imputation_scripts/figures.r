@@ -13,7 +13,7 @@ if (length(args) == 1){
   config = NULL
   config = rbind(config, data.frame(
     base_folder = '~/Documents/chiara/imputation/Analysis',
-    experiment = 'across_imputation',
+    experiment = 'mixed_imputation',
     dataset = 'line1_filtered', ## name of dataset
     outdir = 'results',
     force_overwrite = FALSE
@@ -114,6 +114,37 @@ if (exp_label == "gap") {
   ggsave(filename = fname, plot = p, device = "png", width = 8, height = 10) 
 }
 
+### MIXED (GAP) IMPUTATION
+if (exp_label == "mixed") {
+  
+  vec <- unique(df$sample_size)
+  resto = vec %% 10
+  newvec = vec/10
+  newvec <- ifelse(resto > 5, ceiling(newvec), floor(newvec))
+  newvec = newvec*10
+  
+  df$sample_size = newvec[match(df$sample_size, vec)]
+  
+  df$experiment_name = gsub("_filtered","",df$experiment_name)
+  df$species <- factor(df$species, levels = c("cattle", "goat", "sheep", "maize", "peach", "simdata"))
+  # df$sample_size = factor(df$sample_size, levels = c("100","80","60","40","20"))
+  df$sample_size = factor(df$sample_size, levels = c("20","40","60","80","100"))
+  
+  p <- ggplot(df, aes(x = sample_size, y = kappa)) + geom_boxplot(aes(fill=species), alpha = 0.5)
+  p <- p + stat_summary(
+    fun = mean,
+    geom = 'line',
+    aes(group = experiment_name, colour = species),
+    linewidth = 1.25,
+    position = position_dodge(width = 0.95) #this has to be added
+  )
+  p <- p + facet_wrap(~proportion_missing)
+  p <- p + xlab("sample size")
+  p <- p + theme(legend.position="bottom")
+ 
+  fname = file.path(config$base_folder, outdir, paste("kappa_all_",exp_label,".png", sep = ""))
+  ggsave(filename = fname, plot = p, device = "png", width = 8, height = 6) 
+}
 
 ## DENSITY IMP
 if (exp_label == "density") {
