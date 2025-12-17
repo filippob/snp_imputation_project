@@ -10,7 +10,7 @@ sample_size=$3
 species=$4
 
 ## SETUP
-prjfolder="$HOME/imputation"
+prjfolder="$HOME/Documents/chiara/imputation"
 dataset=$species #name of dataset folder in Analysis/
 outdir="$prjfolder/Analysis/$dataset/mixed_imputation"
 datafolder="$prjfolder/Analysis/$dataset/filtered_data"
@@ -20,7 +20,7 @@ inputfile=$1
 
 ## SOFTWARE
 plink="$HOME/software/plink/plink"
-species="cow"
+#species="cow"
 
 ## PARAMETERS
 nsize=$sample_size
@@ -30,6 +30,14 @@ if [ ! -d $outdir ]; then
         echo "making folder $outdir"
         mkdir -p $outdir
 fi
+
+echo "Input species is; $species"
+
+if [ "$species" != "cow" ] && [ "$species" != "sheep" ]; then
+	species="cow"
+fi
+
+echo "Plink species is $species"
 
 echo " - running the low-to-high density imputation workflow"
 bash $prjfolder/$repofolder/imputationWorkflow.sh -f $inputfile -s $species -p $miss_inject -n $nsize -o $outdir -c $configf

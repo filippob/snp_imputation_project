@@ -13,17 +13,17 @@
 ## PARAMETERS
 ##########################################################
 datafolder="data/goat/filtered_data"
-pops="nss ts"
-target="ts"
-sample_size=70
-ld_size=20
-missrate=0.05 ## for gap and mixed imputation experiments
-relationship="distant" ## for across-population experiments
-dataset="BOE_filtered" ## peach: combined_18k_filtered; goat: goat_filtered etc.
+pops=""
+target="POP222"
+sample_size=20
+ld_size=10
+missrate=0.10 ## for gap and mixed imputation experiments
+relationship="" ## for across-population experiments
+dataset="goat_cleaned_filtered" ## peach: combined_18k_filtered; goat: goat_filtered etc.
 species="goat" ## this commands the output folder
 ld_array=""
 #ld_array="/home/freeclimb/data/peach/SNP_array/snp_names.9k"
-exp_type="DENSITY" ## ACROSS, DENSITY, GAP
+exp_type="MIXED" ## ACROSS, DENSITY, GAP, MIXED
 #########################################################
 
 n=3 ## n. of replicates to run
@@ -47,6 +47,19 @@ then
 	#for dataset in nss_filtered;
 	#for dataset in CxEL_filtered DxP_filtered pop001_filtered pop004_filtered;
 	#for dataset in ALP_filtered ANG_filtered BRK_filtered BOE_filtered CRE_filtered LNR_filtered;
+fi
+
+## MIXED IMP
+if [[ "$exp_type" == "MIXED" ]];
+then
+	echo "Running mixed-imputation experiments"
+
+	for i in $(seq 1 $n);
+	do
+		echo "running replicate $i on dataset $dataset"
+		bash snp_imputation_project/run_mixedimputation.sh $datafolder/$dataset $missrate $sample_size $species
+	done
+
 fi
 
 ## DENSITY IMP
@@ -87,7 +100,7 @@ then
 			do	
 				echo "running replicate $i on dataset $dataset"
 				#bash run_densityimputation.sh $datafolder/$dataset
-				bash run_acrossimputation.sh $datafolder/$dataset "$pops" $pop $sample_size $relationship $species $ld_array
+				bash snp_imputation_project/run_acrossimputation.sh $datafolder/$dataset "$pops" $pop $sample_size $relationship $species
 				#echo "run_acrossimputation.sh $datafolder/$dataset '$pops' $pop $sample_size $relationship $species $ld_array"
 			done
 		done
@@ -97,9 +110,11 @@ then
                 do
                 	echo "running replicate $i on dataset $dataset"
                        	#bash run_densityimputation.sh $datafolder/$dataset
-                        bash run_acrossimputation.sh $datafolder/$dataset "$pops" "$target" $sample_size $relationship $species $ld_array
+                        bash snp_imputation_project/run_acrossimputation.sh $datafolder/$dataset "$pops" "$target" $sample_size $relationship $species
                	done
 	fi
 fi
 
 echo "DONE!"
+
+
