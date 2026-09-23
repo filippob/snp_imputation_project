@@ -4,3 +4,4 @@
     - `1.2.preprocess_simdata.sh`: this script updates SNP positions from floats to integers (correct format for next steps with Plink/Vcftools)
 3. `2.create_ped_map.sh`: takes in input the SNP genotypes simulated by QMSim, and the updated map file, and creates ped/map files (Plink formatting)
 4. `3.convert_allele_coding.sh`: converts the 1/2 SNP coding from QMSim to letter nucleotides (A/C)
+5. `4.prepare_simulated_data.sh`: scripts that combines the data from the three simulated populations into one single ped/map file pair
