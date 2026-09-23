@@ -1,8 +1,7 @@
 #!/bin/sh
 
-## this script takes in input the Plink maize files from https://datacommons.cyverse.org/browse/iplant/home/shared/commons_repo/curated/Cook_KernelArchitecturePlantPhys_Feb2012 
-## and metadata from https://onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1111%2Fj.1365-313X.2005.02591.x&file=TPJ_2591_sm_tableS1.doc
-## and update family IDs in the Plink binary files to allow for our experiments of imputation in heterogeneous populations
+## this script takes in input the ped/map simulated files for the three lines
+## and combines them in a single ped/map file-pair for subsequent analysis
 
 plink=$HOME/Downloads/plink
 data_folder="simulation/r_sim1"
