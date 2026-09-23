@@ -5,6 +5,6 @@ prjfolder="$HOME/Documents/chiara/imputation/simulation"
 cd $prjfolder
 
 echo " - running simulations ... "
-./QMSim2_Linux/QMSim paramfiles/sim1.prm -o
+./simulation_software/QMSim2 paramfiles/sim1.prm -o
 
 echo "DONE!"
