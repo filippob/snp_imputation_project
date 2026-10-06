@@ -14,7 +14,7 @@ if (length(args) == 1){
   config = rbind(config, data.frame(
     base_folder = '~/Documents/chiara/imputation/Analysis',
     experiment = 'mixed_imputation',
-    dataset = 'line1_filtered', ## name of dataset
+    dataset = 'HOL_filtered', ## name of dataset
     outdir = 'results',
     force_overwrite = FALSE
   ))
@@ -125,25 +125,41 @@ if (exp_label == "mixed") {
   
   df$sample_size = newvec[match(df$sample_size, vec)]
   
-  df$experiment_name = gsub("_filtered","",df$experiment_name)
+  df$experiment_name = gsub("_cleaned.*|_filtered.*","",df$experiment_name)
   df$species <- factor(df$species, levels = c("cattle", "goat", "sheep", "maize", "peach", "simdata"))
-  # df$sample_size = factor(df$sample_size, levels = c("100","80","60","40","20"))
-  df$sample_size = factor(df$sample_size, levels = c("20","40","60","80","100"))
+  df$sample_size = factor(df$sample_size, levels = c("20","40","60","80","100","150","200"))
   
-  p <- ggplot(df, aes(x = sample_size, y = kappa)) + geom_boxplot(aes(fill=species), alpha = 0.5)
-  p <- p + stat_summary(
-    fun = mean,
-    geom = 'line',
-    aes(group = experiment_name, colour = species),
-    linewidth = 1.25,
-    position = position_dodge(width = 0.95) #this has to be added
-  )
-  p <- p + facet_wrap(~proportion_missing)
-  p <- p + xlab("sample size")
-  p <- p + theme(legend.position="bottom")
+  plotdf <- df %>%
+    group_by(proportion_missing, sample_size, experiment_name) %>%
+    summarise(
+      average_kappa = mean(kappa),
+      sd_kappa = sd(kappa),
+      .groups = "drop"
+    )
+  plotdf$size = as.integer(as.character(plotdf$sample_size))
+  plotdf[is.na(plotdf)] = 0
+  
+  threshold = 100
+  q <- ggplot() + geom_ribbon(data = subset(plotdf, size <= threshold),
+                              aes(x = size, ymin = average_kappa - sd_kappa, ymax = average_kappa + sd_kappa,
+                                  fill = experiment_name, group = experiment_name),
+                              alpha = 0.2)
+  q <- q + geom_line(data = subset(plotdf, size <= threshold),
+                     aes(size, average_kappa, colour = experiment_name, group = experiment_name),
+                     linewidth = 1.2)
+  q <- q + geom_ribbon(data = subset(plotdf, size >= threshold),
+                       aes(x = size, ymin = average_kappa - sd_kappa, ymax = average_kappa + sd_kappa, group = experiment_name),
+                       fill = "grey70", alpha = 0.2)
+  q <- q + geom_line(data = subset(plotdf, size >= threshold),
+                     aes(size, average_kappa, group = experiment_name), colour = "grey70", linewidth = 1.2)
+  q <- q + facet_wrap(~proportion_missing, scales = "free_y")
+  q <- q + labs(x = "sample size", y = "average kappa") + theme_bw() + theme(legend.position = "bottom")
+  q <- q + scale_x_continuous(breaks = c(20, 40, 60, 80, 100, 150, 200))
+  q <- q + guides(fill = "none")
+  # q
  
-  fname = file.path(config$base_folder, outdir, paste("kappa_all_",exp_label,".png", sep = ""))
-  ggsave(filename = fname, plot = p, device = "png", width = 8, height = 6) 
+  fname = file.path(config$base_folder, outdir, paste("kappa_std_all_",exp_label,".png", sep = ""))
+  ggsave(filename = fname, plot = q, device = "png", width = 8, height = 6) 
 }
 
 ## DENSITY IMP
