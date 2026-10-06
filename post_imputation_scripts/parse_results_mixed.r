@@ -13,9 +13,9 @@ if (length(args) == 1){
   config = NULL
   config = rbind(config, data.frame(
     base_folder = '~/Documents/chiara/imputation',
-    exp_folder = 'Analysis/simdata/mixed_imputation',
+    exp_folder = 'Analysis/cattle/mixed_imputation',
     # dataset = 'ts_filtered', ## name of dataset
-    outdir = 'Analysis/simdata/results',
+    outdir = 'Analysis/cattle/results',
     force_overwrite = FALSE
   ))
   
