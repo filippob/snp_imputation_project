@@ -39,7 +39,7 @@ fi
 
 echo "Plink species is $species"
 
-echo " - running the low-to-high density imputation workflow"
+echo " - running the mixed imputation workflow"
 bash $prjfolder/$repofolder/imputationWorkflow.sh -f $inputfile -s $species -p $miss_inject -n $nsize -o $outdir -c $configf
 
 echo "DONE!"
