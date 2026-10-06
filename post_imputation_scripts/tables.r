@@ -6,7 +6,7 @@ library("tidyverse")
 library("data.table")
 
 base_folder = '~/Documents/chiara/imputation/Analysis'
-experiment = 'gap'
+experiment = 'mixed'
 # dataset = 'line1_filtered'
 outdir = 'results/tables'
 
@@ -16,7 +16,7 @@ outdir = 'results/tables'
 
 ## avg kappa
 df = data.frame(NULL)
-species_list = c("goat","cattle","sheep","peach","maize","simdata")
+species_list = c("simdata","goat","cattle","sheep","peach","maize")
 
 for (species in species_list) {
   
@@ -39,7 +39,7 @@ for (species in species_list) {
   temp$species = species
   temp$experiment_type = experiment
   
-  df <- rbind.data.frame(df,temp)
+  df <- bind_rows(df,temp)
 }
 
 
@@ -48,13 +48,13 @@ if (experiment == "gap") {
   df <- df |>
     mutate(experiment_name = gsub("_filtered", "", experiment_name)) |>
     rename(dataset = experiment_name)
+  
+  ### CAUTION !! CHECK FILTER WHEN NOT TEST !! ##
+  df <- df |> filter(!grepl("SAA", dataset))
+  df <- df |> filter(!grepl("pop001", dataset))
+  df <- df |> filter(!(grepl("ANG", dataset) & species == "goat"))
+  df <- df |> filter(!grepl("CRE", dataset))
 }
-
-### CAUTION !! CHECK FILTER WHEN NOT TEST !! ##
-df <- df |> filter(!grepl("SAA", dataset))
-df <- df |> filter(!grepl("pop001", dataset))
-df <- df |> filter(!(grepl("ANG", dataset) & species == "goat"))
-df <- df |> filter(!grepl("CRE", dataset))
 
 
 dir.create(file.path(base_folder, outdir), showWarnings = FALSE)
@@ -85,20 +85,20 @@ for (species in species_list) {
   temp$species = species
   temp$experiment_type = experiment
   
-  df <- rbind.data.frame(df,temp)
+  df <- bind_rows(df,temp)
 }
 
 if (experiment == "gap") {
   df <- df |>
     mutate(experiment_name = gsub("_filtered", "", experiment_name)) |>
     rename(dataset = experiment_name, miss_rate = proportion_missing, experiment = experiment_type)
-}
 
-### CAUTION !! CHECK FILTER WHEN NOT TEST !! ##
-df <- df |> filter(!grepl("SAA", dataset))
-df <- df |> filter(!grepl("pop001", dataset))
-df <- df |> filter(!(grepl("ANG", dataset) & species == "goat"))
-df <- df |> filter(!grepl("CRE", dataset))
+  ### CAUTION !! CHECK FILTER WHEN NOT TEST !! ##
+  # df <- df |> filter(!grepl("SAA", dataset))
+  # df <- df |> filter(!grepl("pop001", dataset))
+  # df <- df |> filter(!(grepl("ANG", dataset) & species == "goat"))
+  # df <- df |> filter(!grepl("CRE", dataset))
+}
 
 dir.create(file.path(base_folder, outdir), showWarnings = FALSE)
 fname = paste(experiment, "std", "kappa.csv", sep="_")
@@ -129,7 +129,7 @@ for (species in species_list) {
   temp$species = species
   temp$experiment_type = experiment
   
-  df <- rbind.data.frame(df,temp)
+  df <- bind_rows(df,temp)
 }
 
 
@@ -137,13 +137,13 @@ if (experiment == "gap") {
   df <- df |>
     mutate(experiment_name = gsub("_filtered", "", experiment_name)) |>
     rename(dataset = experiment_name, miss_rate = proportion_missing, experiment = experiment_type)
+  
+  ### CAUTION !! CHECK FILTER WHEN NOT TEST !! ##
+  df <- df |> filter(!grepl("SAA", dataset))
+  df <- df |> filter(!grepl("pop001", dataset))
+  df <- df |> filter(!(grepl("ANG", dataset) & species == "goat"))
+  df <- df |> filter(!grepl("CRE", dataset))
 }
-
-### CAUTION !! CHECK FILTER WHEN NOT TEST !! ##
-df <- df |> filter(!grepl("SAA", dataset))
-df <- df |> filter(!grepl("pop001", dataset))
-df <- df |> filter(!(grepl("ANG", dataset) & species == "goat"))
-df <- df |> filter(!grepl("CRE", dataset))
 
 dir.create(file.path(base_folder, outdir), showWarnings = FALSE)
 fname = paste(experiment, "experiment", "plan.csv", sep="_")
@@ -187,14 +187,13 @@ if (experiment == "density") {
   df <- df |>
     mutate(experiment_name = gsub("_filtered", "", experiment_name)) |>
     rename(dataset = experiment_name, experiment = experiment_type)
+  
+  ### CAUTION !! CHECK FILTER WHEN NOT TEST !! ##
+  df <- df |> filter(!grepl("SAA", dataset))
+  df <- df |> filter(!grepl("pop001", dataset))
+  df <- df |> filter(!(grepl("ANG", dataset) & species == "goat"))
+  df <- df |> filter(!grepl("CRE", dataset))
 }
-
-
-### CAUTION !! CHECK FILTER WHEN NOT TEST !! ##
-df <- df |> filter(!grepl("SAA", dataset))
-df <- df |> filter(!grepl("pop001", dataset))
-df <- df |> filter(!(grepl("ANG", dataset) & species == "goat"))
-df <- df |> filter(!grepl("CRE", dataset))
 
 dir.create(file.path(base_folder, outdir), showWarnings = FALSE)
 fname = paste(experiment, "num", "missing.csv", sep="_")
