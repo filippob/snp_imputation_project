@@ -139,7 +139,7 @@ if (exp_label == "mixed") {
   plotdf$size = as.integer(as.character(plotdf$sample_size))
   plotdf[is.na(plotdf)] = 0
   
-  threshold = 100
+  threshold = 100 ## above this sample size, all is gray (this is beyond the gap imputation max size)
   q <- ggplot() + geom_ribbon(data = subset(plotdf, size <= threshold),
                               aes(x = size, ymin = average_kappa - sd_kappa, ymax = average_kappa + sd_kappa,
                                   fill = experiment_name, group = experiment_name),
@@ -152,7 +152,7 @@ if (exp_label == "mixed") {
                        fill = "grey70", alpha = 0.2)
   q <- q + geom_line(data = subset(plotdf, size >= threshold),
                      aes(size, average_kappa, group = experiment_name), colour = "grey70", linewidth = 1.2)
-  q <- q + facet_wrap(~proportion_missing, scales = "free_y")
+  q <- q + facet_wrap(~proportion_missing)
   q <- q + labs(x = "sample size", y = "average kappa") + theme_bw() + theme(legend.position = "bottom")
   q <- q + scale_x_continuous(breaks = c(20, 40, 60, 80, 100, 150, 200))
   q <- q + guides(fill = "none")
