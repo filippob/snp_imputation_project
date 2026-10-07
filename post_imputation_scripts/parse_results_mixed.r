@@ -168,6 +168,7 @@ print("#######################################################################")
 #######################################
 ## n. of missing SNP genotypes
 writeLines(" -  n. of missing SNP genotypes")
+print("#######################################################################")
 dn <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(n_miss = round(mean(injectedMissing),1)) |>
