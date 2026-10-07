@@ -16,8 +16,13 @@ portion of samples with HD genotypes; the result is all samples with HD genotype
 3. across-imputation: impute from one (or more) populations to another one (training: all other species; missing genotypes: the target species)
 4. mixed-imputation: impute residual missing SNP genotypes in a mixed datasets with multiple populations together
 
+---
+
 ## Minimum workflow
 1. [clean_genotypes.sh](imputation_support_scripts/clean_genotypes.sh): takes in input the raw data and keeps the desired populations/breeds and chromosomes (e.g. exclude sex chromosomes)
       - **sheep**: SNP50_Breedv1.[bim/bed/fam] $\rightarrow$ sheep_cleaned.[bim/bed/fam]
-      - **maize**: SNP55K_maize282.[bim/bed/fam] $\rightarrow$ maize_cleaned.[bim/bed/fam]
+      - **maize**: SNP55K_maize282.[bim/bed/fam]* $\rightarrow$ maize_cleaned.[bim/bed/fam]
 3. dadsa
+
+
+*the binary Plink fileset `SNP55K_maize282` was obtained from the raw data files (single hapmap files for each chromosome) using custom scripts (1.hapmap2vcf.sh; 2.merge_vcf.sh; 4.vcf2plink.sh)
