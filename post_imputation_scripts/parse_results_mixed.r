@@ -59,6 +59,7 @@ df$sample_size = newvec[match(df$sample_size, vec)]
 
 print("#######################################################################")
 writeLines(" - SAMPLE SIZE:")
+print("#######################################################################")
 dd <- group_by(df, experiment_name, sample_size, proportion_missing) |> 
   summarise(N = n()) |> 
   spread(key = sample_size, value = N)
@@ -66,6 +67,7 @@ print(dd)
 
 print("#######################################################################")
 writeLines(" - AVERAGE TOTAL ACCURACY:")
+print("#######################################################################")
 dd <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(avg = mean(totalAccuracy)) |>
@@ -75,6 +77,7 @@ print(dd)
 
 print("#######################################################################")
 writeLines(" - AVERAGE AA ACCURACY:")
+print("#######################################################################")
 dd <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(avg = mean(accuracyAA)) |>
@@ -84,6 +87,7 @@ print(dd)
 
 print("#######################################################################")
 writeLines(" - AVERAGE AB ACCURACY:")
+print("#######################################################################")
 dd <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(avg = mean(accuracyAB)) |>
@@ -93,6 +97,7 @@ print(dd)
 
 print("#######################################################################")
 writeLines(" - AVERAGE BB ACCURACY:")
+print("#######################################################################")
 dd <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(avg = mean(accuracyBB)) |>
@@ -115,6 +120,7 @@ df <- df |>
 
 print("#######################################################################")
 writeLines(" - AVERAGE COHEN'S KAPPA:")
+print("#######################################################################")
 dd <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(avg = mean(kappa)) |>
@@ -127,9 +133,10 @@ fname = file.path(config$base_folder, config$outdir, paste("summary_", exp_label
 fwrite(x = dd, file = fname, sep = ",")
 
 print("#######################################################################")
+writeLines(" - STD. DEV. FOR COHEN'S KAPPA:")
+print("#######################################################################")
 #######################################
 ## std deviation for kappa
-writeLines(" - STD. DEV. FOR COHEN'S KAPPA:")
 dn <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(std = sd(kappa)) |>
@@ -145,6 +152,7 @@ print("#######################################################################")
 #######################################
 ## n. of experiments run
 writeLines(" - N. OF EXPERIMENTS RUN:")
+print("#######################################################################")
 dn <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(N = n()) |>
