@@ -15,3 +15,8 @@ support scripts and material for the imputation project (diploid genomes, multip
 portion of samples with HD genotypes; the result is all samples with HD genotypes
 3. across-imputation: impute from one (or more) populations to another one (training: all other species; missing genotypes: the target species)
 4. mixed-imputation: impute residual missing SNP genotypes in a mixed datasets with multiple populations together
+
+## Minimum workflow
+1. [clean_genotypes.sh](imputation_support_scripts/clean_genotypes.sh): takes in input the raw data and keeps the desired populations/breeds and chromosomes (e.g. exclude sex chromosomes)
+  - sheep: SNP50_Breedv1.[bim/bed/fam] $\rightarrow$ sheep_cleaned.[bim/bed/fam]
+3. dadsa
