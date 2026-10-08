@@ -45,8 +45,10 @@ portion of samples with HD genotypes; the result is all samples with HD genotype
 
 ### Imputation
 
-1. []():
-      - config 
+1. [run_gapimputation.sh](run_gapimputation.sh):
+      - first, edit the [config file](https://github.com/filippob/heterogeneousImputation/config.sh): prefix for the type of analysis (e.g. GAPIMPUTATION), paths to software (Rscript, Plink, Beagle)
+      - edit also the [pathNames.txt](https://github.com/filippob/heterogeneousImputation/pathNames.txt) file: path to the project folder (where the analysis is run), more paths to software
+      - run as: `bash run_gapimputation.sh $datafolder/$dataset $missrate $sample_size $species` $\rightarrow$ e.g. `bash run_gapimputation.sh filtered_data/cattle_filtered 0.01 20 cow`
 
 ---
 
