@@ -26,6 +26,7 @@ portion of samples with HD genotypes; the result is all samples with HD genotype
       - **maize**: SNP55K_maize282.[bim/bed/fam]<sup>*</sup> $\rightarrow$ maize_cleaned.[bim/bed/fam]
       - **peach**: combined_18k.[bim/bed/fam] $\rightarrow$ peach_cleaned.[bim/bed/fam]
       - **simulated data**: simdata.[bim/bed/fam] [no cleaning, since this is simulated data: it directly went to the filtering step]
+2. [split_pops.sh](imputation_support_scripts/split_pops.sh): script that takes in input the cleaned data by species and splits them into the corresponding subpopulations
 3. [filter_genotypes.sh](imputation_support_scripts/filter_genotypes.sh): takes in input the cleaned data and apply some filtering criteria on the SNP genotypes
       - \<dataset\>_cleaned.[bim/bed/fam] $\rightarrow$ \<dataset\>_filtered.[bim/bed/fam]
       - common set of parameters across datasets (loose filtering: min MAF = 0.01; min MAC = 4; max missing-rate per SNP = 0.05; max missing-rate per sample = 0.2)
