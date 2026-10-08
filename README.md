@@ -24,8 +24,8 @@ portion of samples with HD genotypes; the result is all samples with HD genotype
       - **goat**: goat.[bim/bed/fam] $\rightarrow$ goat_cleaned.[bim/bed/fam]
       - **cattle**: PLINK_QC_PABLO_TUTTO.[bim/bed/fam] $\rightarrow$ cattle_cleaned.[bim/bed/fam] 
       - **maize**: SNP55K_maize282.[bim/bed/fam]<sup>*</sup> $\rightarrow$ maize_cleaned.[bim/bed/fam]
-      - **peach**: combined_18k.[bim/bed/fam]<sup>*</sup> $\rightarrow$ peach_cleaned.[bim/bed/fam]
-      - **simulated data**:
+      - **peach**: combined_18k.[bim/bed/fam] $\rightarrow$ peach_cleaned.[bim/bed/fam]
+      - **simulated data**: simdata.[bim/bed/fam] [no cleaning, since this is simulated data: it directly went to the filtering step]
 3. [filter_genotypes.sh](imputation_support_scripts/filter_genotypes.sh):
 
 
