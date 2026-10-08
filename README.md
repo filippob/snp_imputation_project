@@ -19,6 +19,9 @@ portion of samples with HD genotypes; the result is all samples with HD genotype
 ---
 
 ## Minimum workflow
+
+### Preprocessing
+
 1. [clean_genotypes.sh](imputation_support_scripts/clean_genotypes.sh): takes in input the raw data and keeps the desired populations/breeds and chromosomes (e.g. exclude sex chromosomes)
       - **sheep**: SNP50_Breedv1.[bim/bed/fam] $\rightarrow$ sheep_cleaned.[bim/bed/fam]
       - **goat**: goat.[bim/bed/fam] $\rightarrow$ goat_cleaned.[bim/bed/fam]
