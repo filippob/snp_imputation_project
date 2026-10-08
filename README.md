@@ -27,7 +27,13 @@ portion of samples with HD genotypes; the result is all samples with HD genotype
       - **peach**: combined_18k.[bim/bed/fam] $\rightarrow$ peach_cleaned.[bim/bed/fam]
       - **simulated data**: simdata.[bim/bed/fam] [no cleaning, since this is simulated data: it directly went to the filtering step]
 2. [split_pops.sh](imputation_support_scripts/split_pops.sh): script that takes in input the cleaned data by species and splits them into the corresponding subpopulations
-3. [filter_genotypes.sh](imputation_support_scripts/filter_genotypes.sh): takes in input the cleaned data and apply some filtering criteria on the SNP genotypes
+      - **sheep**: sheep_cleaned.[bim/bed/fam] $\rightarrow$ [AustralianSuffolk|Rambouillet|Soay].[bim/bed/fam]
+      - **goat**: goat_cleaned.[bim/bed/fam] $\rightarrow$ [ALP|BOE|LNR].[bim/bed/fam]
+      - **cattle**: cattle_cleaned.[bim/bed/fam] $\rightarrow$ [ANG|HOL|LMS].[bim/bed/fam]
+      - **maize**: maize_cleaned.[bim/bed/fam] $\rightarrow$ [nss|ts|mixed].[bim/bed/fam]
+      - **peach**: peach_cleaned.[bim/bed/fam] $\rightarrow$ [CxEL|DxP|pop004].[bim/bed/fam]
+      - **simulated data**: simdata.[bim/bed/fam] $\rightarrow$ [line1|line2|line3].[bim/bed/fam]
+4. [filter_genotypes.sh](imputation_support_scripts/filter_genotypes.sh): takes in input the cleaned data and apply some filtering criteria on the SNP genotypes
       - \<dataset\>_cleaned.[bim/bed/fam] $\rightarrow$ \<dataset\>_filtered.[bim/bed/fam]
       - common set of parameters across datasets (loose filtering: min MAF = 0.01; min MAC = 4; max missing-rate per SNP = 0.05; max missing-rate per sample = 0.2)
       - applied to both the combined species datasets and the individual populations datasets (e.g. Rambouillet sheep, Soay sheep etc.)
