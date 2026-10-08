@@ -21,8 +21,9 @@ portion of samples with HD genotypes; the result is all samples with HD genotype
 ## Minimum workflow
 1. [clean_genotypes.sh](imputation_support_scripts/clean_genotypes.sh): takes in input the raw data and keeps the desired populations/breeds and chromosomes (e.g. exclude sex chromosomes)
       - **sheep**: SNP50_Breedv1.[bim/bed/fam] $\rightarrow$ sheep_cleaned.[bim/bed/fam]
+      - **cattle**: 
       - **maize**: SNP55K_maize282.[bim/bed/fam]<sup>*</sup> $\rightarrow$ maize_cleaned.[bim/bed/fam]
 3. [filter_genotypes.sh](imputation_support_scripts/filter_genotypes.sh):
 
 
-<sup>*</sup><sub><sup>the binary Plink fileset `SNP55K_maize282` was obtained from the raw data files (single hapmap files for each chromosome) using custom scripts (1.hapmap2vcf.sh; 2.merge_vcf.sh; 4.vcf2plink.sh)</sup></sub>
+<sup>*</sup><sub>the binary Plink fileset `SNP55K_maize282` was obtained from the raw data files (single hapmap files for each chromosome) using custom scripts (1.hapmap2vcf.sh; 2.merge_vcf.sh; 4.vcf2plink.sh)</sub>
