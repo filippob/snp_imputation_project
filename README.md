@@ -33,10 +33,11 @@ portion of samples with HD genotypes; the result is all samples with HD genotype
       - **maize**: maize_cleaned.[bim/bed/fam] $\rightarrow$ [nss|ts|mixed].[bim/bed/fam]
       - **peach**: peach_cleaned.[bim/bed/fam] $\rightarrow$ [CxEL|DxP|pop004].[bim/bed/fam]
       - **simulated data**: simdata.[bim/bed/fam] $\rightarrow$ [line1|line2|line3].[bim/bed/fam]
-4. [filter_genotypes.sh](imputation_support_scripts/filter_genotypes.sh): takes in input the cleaned data and apply some filtering criteria on the SNP genotypes
+3. [filter_genotypes.sh](imputation_support_scripts/filter_genotypes.sh): takes in input the cleaned data and apply some filtering criteria on the SNP genotypes
       - \<dataset\>_cleaned.[bim/bed/fam] $\rightarrow$ \<dataset\>_filtered.[bim/bed/fam]
       - common set of parameters across datasets (loose filtering: min MAF = 0.01; min MAC = 4; max missing-rate per SNP = 0.05; max missing-rate per sample = 0.2)
       - applied to both the combined species datasets and the individual populations datasets (e.g. Rambouillet sheep, Soay sheep etc.)
+4. []()
 
 
 <sup>*</sup><sub>the binary Plink fileset `SNP55K_maize282` was obtained from the raw data files (single hapmap files for each chromosome) using custom scripts (1.hapmap2vcf.sh; 2.merge_vcf.sh; 4.vcf2plink.sh)</sub>
