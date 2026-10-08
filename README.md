@@ -41,4 +41,6 @@ portion of samples with HD genotypes; the result is all samples with HD genotype
       - 7000 SNPs were randomly sampled for the LD SNP array in cattle, goat, sheep and maize; 1500 SNPs were sampled for the simulated data; 1000 SNPs were sampled for the peach LD array
 
 
+---
+
 <sup>*</sup><sub>the binary Plink fileset `SNP55K_maize282` was obtained from the raw data files (single hapmap files for each chromosome) using custom scripts (1.hapmap2vcf.sh; 2.merge_vcf.sh; 4.vcf2plink.sh)</sub>
