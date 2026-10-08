@@ -1,7 +1,7 @@
 # snp_imputation_project
 support scripts and material for the imputation project (diploid genomes, multiple species, multiple scenarios)
 
-### multiple species
+### multiple species (and multiple subpopulations within)
 - goats
 - cattle
 - sheep
@@ -27,7 +27,7 @@ portion of samples with HD genotypes; the result is all samples with HD genotype
       - **peach**: combined_18k.[bim/bed/fam] $\rightarrow$ peach_cleaned.[bim/bed/fam]
       - **simulated data**: simdata.[bim/bed/fam] [no cleaning, since this is simulated data: it directly went to the filtering step]
 3. [filter_genotypes.sh](imputation_support_scripts/filter_genotypes.sh):
-      - \<dataset\>_cleaned.[bim/bed/fam] $\rightarrow$ <dataset>_filtered.[bim/bed/fam]
+      - \<dataset\>_cleaned.[bim/bed/fam] $\rightarrow$ \<dataset\>_filtered.[bim/bed/fam]
       - common set of parameters across datasets (loose filtering: min MAF = 0.01; min MAC = 4; max missing-rate per SNP = 0.05; max missing-rate per sample = 0.2)
       - applied to both the combined species datasets and the individual populations datasets (e.g. Rambouillet sheep, Soay sheep etc.)
 
