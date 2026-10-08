@@ -43,6 +43,7 @@ portion of samples with HD genotypes; the result is all samples with HD genotype
 4. [make_random_LD_array.py](imputation_support_scripts/make_random_LD_array.py): script to generate *n* LD SNP arrays by randomly sampling the original HD/MD SNP array
       - 7000 SNPs were randomly sampled for the LD SNP array in cattle, goat, sheep and maize; 1500 SNPs were sampled for the simulated data; 1000 SNPs were sampled for the peach LD array
 
+### Imputation
 
 ---
 
