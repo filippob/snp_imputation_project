@@ -13,9 +13,9 @@ if (length(args) == 1){
   config = NULL
   config = rbind(config, data.frame(
     base_folder = '~/Documents/chiara/imputation',
-    exp_folder = 'Analysis/cattle/gap_imputation',
+    exp_folder = 'Analysis/sheep/gap_imputation',
     # dataset = 'ts_filtered', ## name of dataset
-    outdir = 'Analysis/cattle/results',
+    outdir = 'Analysis/sheep/results',
     force_overwrite = FALSE
   ))
   
@@ -49,9 +49,15 @@ df <- list_of_files %>%
   set_names() %>% 
   map_df(read_csv, .id = "file_name", show_col_types = FALSE) 
 
+print("#######################################################################")
+writeLines(" - SAMPLE SIZE:")
+print("#######################################################################")
 dd <- group_by(df, experiment_name, sample_size, proportion_missing) |> summarise(N = n()) |> spread(key = sample_size, value = N)
 print(dd)
 
+print("#######################################################################")
+writeLines(" - AVERAGE TOTAL ACCURACY:")
+print("#######################################################################")
 dd <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(avg = mean(totalAccuracy)) |>
@@ -59,6 +65,9 @@ dd <- df |>
 
 print(dd)
 
+print("#######################################################################")
+writeLines(" - AVERAGE AA ACCURACY:")
+print("#######################################################################")
 dd <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(avg = mean(accuracyAA)) |>
@@ -66,6 +75,9 @@ dd <- df |>
 
 print(dd)
 
+print("#######################################################################")
+writeLines(" - AVERAGE AB ACCURACY:")
+print("#######################################################################")
 dd <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(avg = mean(accuracyAB)) |>
@@ -73,6 +85,9 @@ dd <- df |>
 
 print(dd)
 
+print("#######################################################################")
+writeLines(" - AVERAGE BB ACCURACY:")
+print("#######################################################################")
 dd <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(avg = mean(accuracyBB)) |>
@@ -94,6 +109,9 @@ df <- df |>
          )
 
 
+print("#######################################################################")
+writeLines(" - AVERAGE COHEN'S KAPPA:")
+print("#######################################################################")
 dd <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(avg = mean(kappa)) |>
@@ -105,8 +123,12 @@ dir.create(file.path(config$base_folder, config$outdir), showWarnings = FALSE)
 fname = file.path(config$base_folder, config$outdir, paste("summary_", exp_label, ".csv", sep=""))
 fwrite(x = dd, file = fname, sep = ",")
 
+
 #######################################
 ## std deviation for kappa
+print("#######################################################################")
+writeLines(" - STD. DEV. FOR COHEN'S KAPPA:")
+print("#######################################################################")
 dn <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(std = sd(kappa)) |>
@@ -118,8 +140,11 @@ fname = file.path(config$base_folder, config$outdir, paste("std_kappa_", exp_lab
 fwrite(x = dn, file = fname, sep = ",")
 #######################################
 
+print("#######################################################################")
 #######################################
 ## n. of experiments run
+writeLines(" - N. OF EXPERIMENTS RUN:")
+print("#######################################################################")
 dn <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(N = n()) |>
@@ -131,8 +156,11 @@ fname = file.path(config$base_folder, config$outdir, paste("exp_plan_", exp_labe
 fwrite(x = dn, file = fname, sep = ",")
 #######################################
 
+print("#######################################################################")
 #######################################
 ## n. of missing SNP genotypes
+writeLines(" -  n. of missing SNP genotypes")
+print("#######################################################################")
 dn <- df |> 
   group_by(experiment_name, sample_size, proportion_missing) |>
   summarise(n_miss = round(mean(injectedMissing),1)) |>
