@@ -25,4 +25,4 @@ portion of samples with HD genotypes; the result is all samples with HD genotype
 3. [filter_genotypes.sh](imputation_support_scripts/filter_genotypes.sh):
 
 
-*the binary Plink fileset `SNP55K_maize282` was obtained from the raw data files (single hapmap files for each chromosome) using custom scripts (1.hapmap2vcf.sh; 2.merge_vcf.sh; 4.vcf2plink.sh)
+<sup>*</sup><sub>the binary Plink fileset `SNP55K_maize282` was obtained from the raw data files (single hapmap files for each chromosome) using custom scripts (1.hapmap2vcf.sh; 2.merge_vcf.sh; 4.vcf2plink.sh)</sub>
