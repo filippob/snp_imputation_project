@@ -19,6 +19,9 @@ portion of samples with HD genotypes; the result is all samples with HD genotype
 ---
 
 ## Minimum workflow
+
+### Preprocessing
+
 1. [clean_genotypes.sh](imputation_support_scripts/clean_genotypes.sh): takes in input the raw data and keeps the desired populations/breeds and chromosomes (e.g. exclude sex chromosomes)
       - **sheep**: SNP50_Breedv1.[bim/bed/fam] $\rightarrow$ sheep_cleaned.[bim/bed/fam]
       - **goat**: goat.[bim/bed/fam] $\rightarrow$ goat_cleaned.[bim/bed/fam]
@@ -33,10 +36,20 @@ portion of samples with HD genotypes; the result is all samples with HD genotype
       - **maize**: maize_cleaned.[bim/bed/fam] $\rightarrow$ [nss|ts|mixed].[bim/bed/fam]
       - **peach**: peach_cleaned.[bim/bed/fam] $\rightarrow$ [CxEL|DxP|pop004].[bim/bed/fam]
       - **simulated data**: simdata.[bim/bed/fam] $\rightarrow$ [line1|line2|line3].[bim/bed/fam]
-4. [filter_genotypes.sh](imputation_support_scripts/filter_genotypes.sh): takes in input the cleaned data and apply some filtering criteria on the SNP genotypes
+3. [filter_genotypes.sh](imputation_support_scripts/filter_genotypes.sh): takes in input the cleaned data and apply some filtering criteria on the SNP genotypes
       - \<dataset\>_cleaned.[bim/bed/fam] $\rightarrow$ \<dataset\>_filtered.[bim/bed/fam]
       - common set of parameters across datasets (loose filtering: min MAF = 0.01; min MAC = 4; max missing-rate per SNP = 0.05; max missing-rate per sample = 0.2)
       - applied to both the combined species datasets and the individual populations datasets (e.g. Rambouillet sheep, Soay sheep etc.)
+4. [make_random_LD_array.py](imputation_support_scripts/make_random_LD_array.py): script to generate *n* LD SNP arrays by randomly sampling the original HD/MD SNP array
+      - 7000 SNPs were randomly sampled for the LD SNP array in cattle, goat, sheep and maize; 1500 SNPs were sampled for the simulated data; 1000 SNPs were sampled for the peach LD array
 
+### Imputation
+
+1. [run_gapimputation.sh](run_gapimputation.sh):
+      - first, edit the [config file](https://github.com/filippob/heterogeneousImputation/config.sh): prefix for the type of analysis (e.g. GAPIMPUTATION), paths to software (Rscript, Plink, Beagle)
+      - edit also the [pathNames.txt](https://github.com/filippob/heterogeneousImputation/pathNames.txt) file: path to the project folder (where the analysis is run), more paths to software
+      - run as: `bash run_gapimputation.sh $datafolder/$dataset $missrate $sample_size $species` $\rightarrow$ e.g. `bash run_gapimputation.sh filtered_data/cattle_filtered 0.01 20 cow`
+
+---
 
 <sup>*</sup><sub>the binary Plink fileset `SNP55K_maize282` was obtained from the raw data files (single hapmap files for each chromosome) using custom scripts (1.hapmap2vcf.sh; 2.merge_vcf.sh; 4.vcf2plink.sh)</sub>
