@@ -16,7 +16,7 @@ if (length(args) == 1){
     exp_folder = 'Analysis/goat/across_imputation',
     dataset = '', ## name of dataset, if needed
     outdir = 'Analysis/goat/results',
-    threshold = 0.07, # threshold between close and distant populations (in terms of Fst)
+    threshold = 0.10, # threshold between close and distant populations (in terms of Fst)
     force_overwrite = FALSE
   ))
   
@@ -190,9 +190,15 @@ df <- df |>
 df <- df |>
   mutate(missing_population = target)
 
+print("#######################################################################")
+writeLines(" - SAMPLE SIZE:")
+print("#######################################################################")
 dd <- group_by(df, dataset, reference, missing_population, sample_size) |> summarise(N = n()) |> spread(key = sample_size, value = N)
 print(dd)
 
+print("#######################################################################")
+writeLines(" - AVERAGE TOTAL ACCURACY:")
+print("#######################################################################")
 dd <- df |> 
   group_by(dataset, reference, missing_population, sample_size) |>
   summarise(avg = mean(totalAccuracy)) |>
@@ -200,6 +206,9 @@ dd <- df |>
 
 print(dd)
 
+print("#######################################################################")
+writeLines(" - AVERAGE AA ACCURACY:")
+print("#######################################################################")
 dd <- df |> 
   group_by(dataset, relationship, reference, missing_population, sample_size) |>
   summarise(avg = mean(accuracyAA)) |>
@@ -207,6 +216,9 @@ dd <- df |>
 
 print(dd)
 
+print("#######################################################################")
+writeLines(" - AVERAGE AB ACCURACY:")
+print("#######################################################################")
 dd <- df |> 
   group_by(dataset, relationship, reference, missing_population, sample_size) |>
   summarise(avg = mean(accuracyAB)) |>
@@ -214,6 +226,9 @@ dd <- df |>
 
 print(dd)
 
+print("#######################################################################")
+writeLines(" - AVERAGE BB ACCURACY:")
+print("#######################################################################")
 dd <- df |> 
   group_by(dataset, relationship, reference, missing_population, sample_size) |>
   summarise(avg = mean(accuracyBB)) |>
@@ -234,6 +249,9 @@ df <- df |>
          kappa = (totalAccuracy-chance_accuracy)/(1-chance_accuracy)
          )
 
+print("#######################################################################")
+writeLines(" - AVERAGE COHEN'S KAPPA:")
+print("#######################################################################")
 dd <- df |>
   group_by(dataset, relationship, reference, missing_population, sample_size) |>
   summarise(avg = mean(kappa)) |>
